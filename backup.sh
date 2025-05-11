@@ -29,6 +29,9 @@ fi
 
 # create a timestamp
 TIMESTAMP=$(date +"%Y-%m-%d")
+
+echo "Backing up the world directory $WORLD_DIR to the s3 bucket $S3_BUCKET/$TIMESTAMP/$WORLD_NAME.tar.gz"
+
 # create a compressed tar file of the world directory
 tar -czf "/tmp/backup.tar.gz" -C "$WORLD_DIR" . 
 # check if the tar command was successful
@@ -36,8 +39,16 @@ if [ $? -ne 0 ]; then
   echo "Failed to create the backup tar file."
   exit 1
 fi
+echo "Backup tar file created successfully."
+
 # upload the tar file to the s3 bucket
 s3cmd put "/tmp/backup.tar.gz" "$S3_BUCKET/$TIMESTAMP/$WORLD_NAME.tar.gz"
+# check if the s3cmd command was successful
+if [ $? -ne 0 ]; then
+  echo "Failed to upload the backup tar file to the s3 bucket."
+  exit 1
+fi
+echo "Backup tar file uploaded successfully to the s3 bucket."
 rm "/tmp/backup.tar.gz"
 exit 0
 
