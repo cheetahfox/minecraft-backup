@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # This script backs the minecraft world located in the directory $WORLD_DIR
 # and then compresses it into a tar.gz file. And then it uploads it to the
 # s3 bucket $S3_BUCKET.
@@ -11,13 +11,15 @@
 # AWS_SECRET_ACCESS_KEY: The secret access key for the s3 bucket.
 # WORLD_NAME : The name of the world to be backed up.
 
-required_vars=("WORLD_DIR" "S3_BUCKET" "AWS_ACCESS_KEY_ID" "AWS_SECRET_ACCESS_KEY" "WORLD_NAME")
-for var in "${required_vars[@]}"; do
-  if [ -z "${!var}" ]; then
-    echo "$var is not set. Please set it to the appropriate value."
-    exit 1
-  fi
-done
+while read var; do
+    [ -z "${!var}" ] && { echo "$var is empty or not set. Exiting.."; exit 1; } 
+done << EOF
+WORLD_DIR
+S3_BUCKET
+AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY
+WORLD_NAME
+EOF 
 
 # Check if the world directory exists
 if [ ! -d "$WORLD_DIR" ]; then
@@ -37,4 +39,6 @@ fi
 # upload the tar file to the s3 bucket
 s3cmd put "/tmp/backup.tar.gz" "$S3_BUCKET/$TIMESTAMP/$WORLD_NAME.tar.gz"
 rm "/tmp/backup.tar.gz"
+exit 0
+
 
