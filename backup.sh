@@ -7,8 +7,8 @@
 # Make sure to set the following environment variables:
 # WORLD_DIR: The directory where the minecraft world is located.
 # S3_BUCKET: The s3 bucket where the backup will be uploaded.
-# AWS_ACCESS_KEY_ID: The access key id for the s3 bucket.
-# AWS_SECRET_ACCESS_KEY: The secret access key for the s3 bucket.
+# AWS_ACCESS_KEY: The access key id for the s3 bucket.
+# AWS_SECRET_KEY: The secret access key for the s3 bucket.
 # WORLD_NAME : The name of the world to be backed up.
 
 while read var; do
@@ -16,8 +16,8 @@ while read var; do
 done << EOF
 WORLD_DIR
 S3_BUCKET
-AWS_ACCESS_KEY_ID
-AWS_SECRET_ACCESS_KEY
+AWS_ACCESS_KEY
+AWS_SECRET_KEY
 WORLD_NAME
 EOF 
 
