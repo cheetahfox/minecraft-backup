@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: minecraft-backup
+  namespace: apps
+spec:
+  schedule: "0 5 * * *" 
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          affinity:
+          containers:
+            - name: minecraft-backup
+              image: cheetahfox/minecraft-backup:latest
+              imagePullPolicy: IfNotPresent
+              envFrom:
+                - secretRef:
+                  name: s3-secrets
+              env:
+                - name: S3_BUCKET
+                  value: "s3://s3.amazonaws.com/mybucket"
+                - name: WORLD_DIR
+                  value: /minecraft/world
+                - name: WORLD_NAME
+                  value: minecraft-world-name
