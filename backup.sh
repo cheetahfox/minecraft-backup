@@ -19,7 +19,7 @@ S3_BUCKET
 AWS_ACCESS_KEY
 AWS_SECRET_KEY
 WORLD_NAME
-EOF 
+EOF
 
 # Check if the world directory exists
 if [ ! -d "$WORLD_DIR" ]; then
